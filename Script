@@ -187,15 +187,15 @@ local function GetTargets()
         if v:IsA("Humanoid") and v.Health > 0 then
             local char = v.Parent
             if char and char ~= plr.Character and char:IsA("Model") then
-                local root = char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Head") or char:FindFirstChild("Torso")
-                if root then table.insert(t, char) end
+                -- كنقلبو على الراس كأولوية
+                local head = char:FindFirstChild("Head")
+                if head then table.insert(t, char) end
             end
         end
     end
     return t
 end
 
--- الـ ESP المطور والمصلح
 RunService.RenderStepped:Connect(function()
     UIGradient.Rotation = UIGradient.Rotation + 2
     if (masterLock or npcLock) and isHolding and lockTarget then
@@ -231,7 +231,6 @@ RunService.RenderStepped:Connect(function()
         end
     end
 
-    -- أهم سطر: مسح الرسومات القديمة للناس اللي ماتو أو خرجو
     for char, drawings in pairs(Storage) do
         if not currentTargets[char] then
             drawings.Box:Remove()
@@ -246,13 +245,14 @@ UIS.InputBegan:Connect(function(i, p)
         isHolding = true
         local dist = 500
         for _, char in pairs(GetTargets()) do
-            local root = char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Head")
+            -- تعديل السطر التالي باش يشد ف الرأس ديريكت
+            local head = char:FindFirstChild("Head")
             local targetIsPlayer = Players:GetPlayerFromCharacter(char)
-            if root and ((masterLock and targetIsPlayer) or (npcLock and not targetIsPlayer)) then
-                local screenPos, onScreen = camera:WorldToViewportPoint(root.Position)
+            if head and ((masterLock and targetIsPlayer) or (npcLock and not targetIsPlayer)) then
+                local screenPos, onScreen = camera:WorldToViewportPoint(head.Position)
                 if onScreen then
                     local mag = (UIS:GetMouseLocation() - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
-                    if mag < dist then dist = mag; lockTarget = root end
+                    if mag < dist then dist = mag; lockTarget = head end
                 end
             end
         end
