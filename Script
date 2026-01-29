@@ -195,6 +195,7 @@ local function GetTargets()
     return t
 end
 
+-- الـ ESP المطور والمصلح
 RunService.RenderStepped:Connect(function()
     UIGradient.Rotation = UIGradient.Rotation + 2
     if (masterLock or npcLock) and isHolding and lockTarget then
@@ -202,7 +203,10 @@ RunService.RenderStepped:Connect(function()
     end
     
     local allCharacters = GetTargets()
+    local currentTargets = {}
+
     for _, char in pairs(allCharacters) do
+        currentTargets[char] = true
         local isP = Players:GetPlayerFromCharacter(char)
         local show = (isP and espPlayers) or (not isP and espNpcs)
         local root = char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Head")
@@ -220,10 +224,19 @@ RunService.RenderStepped:Connect(function()
                 Storage[char].Box.Size = Vector2.new(s, s*1.3)
                 Storage[char].Box.Position = Vector2.new(pos.X-s/2, pos.Y-s/1.5)
                 Storage[char].Label.Position = Vector2.new(pos.X, pos.Y - s/1.5 - 15)
-                Storage[char].Label.Text = (char.Name ~= "" and char.Name) or "Entity"
+                Storage[char].Label.Text = char.Name or "Entity"
             end
         elseif Storage[char] then
             Storage[char].Box.Visible = false; Storage[char].Label.Visible = false
+        end
+    end
+
+    -- أهم سطر: مسح الرسومات القديمة للناس اللي ماتو أو خرجو
+    for char, drawings in pairs(Storage) do
+        if not currentTargets[char] then
+            drawings.Box:Remove()
+            drawings.Label:Remove()
+            Storage[char] = nil
         end
     end
 end)
