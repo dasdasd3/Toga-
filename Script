@@ -100,7 +100,7 @@ for i = 1, 15 do
 end
 
 local Title = Instance.new("TextLabel", MainFrame)
-Title.Text = "ASTRO ZAML"
+Title.Text = "TOGA</>"
 Title.Font = Enum.Font.GothamBlack
 Title.TextSize = 22
 Title.TextColor3 = Color3.fromRGB(255, 0, 0)
