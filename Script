@@ -7,7 +7,7 @@ local plr = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 
 local cam360 = false
-local smoothValue = 1
+local smoothValue = 1.20
 local autoShoot = true
 
 local function IsVisible(targetPart)
@@ -100,7 +100,7 @@ for i = 1, 15 do
 end
 
 local Title = Instance.new("TextLabel", MainFrame)
-Title.Text = "TOGA</>"
+Title.Text = "TOGA ULTIMATE"
 Title.Font = Enum.Font.GothamBlack
 Title.TextSize = 22
 Title.TextColor3 = Color3.fromRGB(255, 0, 0)
